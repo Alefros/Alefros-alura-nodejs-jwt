@@ -4,7 +4,8 @@ const { InvalidArgumentError } = require('./erros');
 module.exports = {
   campoStringNaoNulo: (valor, nome) => {
     if (typeof valor !== 'string' || valor === 0)
-      throw new InvalidArgumentError(`É necessário preencher o campo ${nome}!`);
+    //if (valor === 0)
+      throw new InvalidArgumentError(`É necessário preencher o campo ${nome} - ${valor}!`);
   },
 
   campoTamanhoMinimo: (valor, nome, minimo) => {
