@@ -48,6 +48,7 @@ class Usuario {
   }
 
   static async buscaPorEmail(email) {
+    console.log('email: ' + email)
     const usuario = await usuariosDao.buscaPorEmail(email);
     if (!usuario) {
       return null;

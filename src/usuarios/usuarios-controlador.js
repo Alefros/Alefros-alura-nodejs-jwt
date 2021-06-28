@@ -19,9 +19,10 @@ module.exports = {
     try {
       const usuario = new Usuario({
         nome,
-        email,
-        senha
+        email
       });
+
+      await usuario.adicionaSenha(senha);
 
       await usuario.adiciona();
 
@@ -36,7 +37,7 @@ module.exports = {
       }
     }
   },
-
+  
   login: async(req, res) => {
     console.log(req.params)
     const token = criaTokenJWT(req.user);
