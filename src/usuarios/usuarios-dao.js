@@ -45,7 +45,6 @@ module.exports = {
   },
 
   buscaPorEmail: email => {
-    console.log('buscaPorEmail - email: ' + email)
     return new Promise((resolve, reject) => {
       db.get(
         `
