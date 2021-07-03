@@ -4,7 +4,9 @@ const { InvalidArgumentError } = require('../erros');
 const jwt = require('jsonwebtoken');
 const blocklist = require('../../redis/manipula-blocklist');
 
-const crypto = require('crypto')
+const crypto = require('crypto');
+const moment = require('moment');
+
 function criaTokenJWT(usuario) {
   const payload = {
     id: usuario.id,
@@ -14,8 +16,9 @@ function criaTokenJWT(usuario) {
   return token;
 }
 
-function criaTokenOpaco() {
+function criaTokenOpaco(usuario) {
   const tokenOpaco = crypto.randomBytes(24).toString('hex');
+  const dataExpiracao = moment().add(5, 'd').unix();
   return tokenOpaco;
 }
 
