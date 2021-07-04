@@ -14,6 +14,13 @@ async function verificaRefreshToken(refreshToken) {
   return id;
 }
 
+async function invalidaRefreshToken(refreshToken) {
+  if (!refreshToken) {
+    throw new InvalidArgumentError('Refresh não enviado!');
+  }
+  await allowlistRefreshToken.deleta(refreshToken);
+}
+
 module.exports = {
   local(req, res, next) {
     passport.authenticate(
@@ -68,12 +75,20 @@ module.exports = {
     )(req, res, next);
   },
 
-  refresh(req, res, next) {
-    const { refreshToken } = req.body;
-    const id = await verificaRefreshToken(refreshToken);
-    await invalidaRefreshToken(refreshToken);
-    req.user = Usuario.buscaPorId(id);
-    return next();
+  async refresh(req, res, next) {
+
+    try {
+      const { refreshToken } = req.body;
+      const id = await verificaRefreshToken(refreshToken);
+      await invalidaRefreshToken(refreshToken);
+      req.user = await Usuario.buscaPorId(id);
+      return next();
+    } catch (erro) {
+      if (erro.name === 'InvalidArgumentError') {
+        return res.status(401).json( { erro: erro.message })
+      }
+      return res.status(500).json( { erro: erro.message })
+    }
   },
 
 };
