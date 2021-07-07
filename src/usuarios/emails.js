@@ -1,0 +1,30 @@
+const nodemailer = require('nodemailer');
+const { modelo } = require('.');
+
+class Email {
+
+    async enviaEmail() {
+        const contaTeste = await nodemailer.createTestAccount();
+        const transportador = nodemailer.createTransport({
+            host: 'smto.ethereal.email',
+            auth: contaTeste,
+        });
+        const info = await transportador.sendMail(this);
+    
+        console.log('URL:' + nodemailer.getTestMessageUrl(info));
+    }
+}
+
+class EmailVerificacao extends Email{
+    constructor(usuario, endereco) {
+        super();
+        this.from = '"Blog do Código" <noreply@blogdocodigo.com.br>';
+        this.to = usuario.email;
+        this.subject = '"Verificação de email'
+        this.text = `Verfique seu email aqui: ${endereco}`
+        this.html = `Verfique seu email aqui: ${endereco}`
+        
+    }
+}
+
+module.exports = { EmailVerificacao };
